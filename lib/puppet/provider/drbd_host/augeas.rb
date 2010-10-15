@@ -24,14 +24,14 @@ Puppet::Type.type(:drbd_host).provide(:augeas) do
   end
 
   def create
-    @aug.set("#{@context}/#{resource[:hostname]}/address", should(:address))
-    @aug.set("#{@context}/#{resource[:hostname]}/disk", should(:disk))
-    @aug.set("#{@context}/#{resource[:hostname]}/device", should(:device))
+    @aug.set("#{@context}/#{resource[:hostname]}/address", resource[:address])
+    @aug.set("#{@context}/#{resource[:hostname]}/disk", resource[:disk])
+    @aug.set("#{@context}/#{resource[:hostname]}/device", resource[:device])
 
-    unless should(:meta_disk).nil?
-      @aug.set("#{@context}/#{resource[:hostname]}/meta-disk", should(:meta_disk))
+    unless resource[:meta_disk].nil?
+      @aug.set("#{@context}/#{resource[:hostname]}/meta-disk", resource[:meta_disk])
     else
-      @aug.set("#{@context}/#{resource[:hostname]}/flexible-meta-disk", should(:flexible_meta_disk))
+      @aug.set("#{@context}/#{resource[:hostname]}/flexible-meta-disk", resource[:flexible_meta_disk])
     end
   end
 
