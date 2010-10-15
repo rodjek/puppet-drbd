@@ -15,6 +15,8 @@ end
 Puppet::Type.type(:drbd_host).provide(:augeas) do
   desc "Augeas support"
 
+  confine :true, @aug.exists("/augeas/load/Drbd/lens")
+
   def initialize(*args)
     super
     @aug = Augeas.open("/")
