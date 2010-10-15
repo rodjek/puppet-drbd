@@ -17,86 +17,87 @@ Puppet::Type.type(:drbd_host).provide(:augeas) do
 
   def initialize(*args)
     super
-    @aug = Augeas.open("/files/etc/drbd.conf/#{resource[:resource]}")
+    @aug = Augeas.open("/")
+    @context = "/files/etc/drbd.conf/#{resource[:resource]}"
   end
 
   def create
-    @aug.set("#{resource[:hostname]}/address", should(:address))
-    @aug.set("#{resource[:hostname]}/disk", should(:disk))
-    @aug.set("#{resource[:hostname]}/device", should(:device))
+    @aug.set("#{@context}/#{resource[:hostname]}/address", should(:address))
+    @aug.set("#{@context}/#{resource[:hostname]}/disk", should(:disk))
+    @aug.set("#{@context}/#{resource[:hostname]}/device", should(:device))
 
     unless should(:meta_disk).nil?
-      @aug.set("#{resource[:hostname]}/meta-disk", should(:meta_disk))
+      @aug.set("#{@context}/#{resource[:hostname]}/meta-disk", should(:meta_disk))
     else
-      @aug.set("#{resource[:hostname]}/flexible-meta-disk", should(:flexible_meta_disk))
+      @aug.set("#{@context}/#{resource[:hostname]}/flexible-meta-disk", should(:flexible_meta_disk))
     end
   end
 
   def destroy
-    @aug.rm(resource[:hostname])
+    @aug.rm("#{@context}/#{resource[:hostname]}")
   end
 
   def exists?
-    @aug.exists(resource[:hostname])
+    @aug.exists("#{@context}/#{resource[:hostname]}")
   end
 
   def device
-    @aug.get("#{resource[:hostname]}/device")
+    @aug.get("#{@context}/#{resource[:hostname]}/device")
   end
 
   def device=(value)
     if value.nil?
-      @aug.rm("#{resource[:hostname]}/device")
+      @aug.rm("#{@context}/#{resource[:hostname]}/device")
     else
-      @aug.set("#{resource[:hostname]}/device", value)
+      @aug.set("#{@context}/#{resource[:hostname]}/device", value)
     end
   end
 
   def disk
-    @aug.get("#{resource[:hostname]}/disk")
+    @aug.get("#{@context}/#{resource[:hostname]}/disk")
   end
 
   def disk=(value)
     if value.nil?
-      @aug.rm("#{resource[:hostname]}/disk")
+      @aug.rm("#{@context}/#{resource[:hostname]}/disk")
     else
-      @aug.set("#{resource[:hostname]}/disk", value)
+      @aug.set("#{@context}/#{resource[:hostname]}/disk", value)
     end
   end
 
   def address
-    @aug.get("#{resource[:hostname]}/address")
+    @aug.get("#{@context}/#{resource[:hostname]}/address")
   end
 
   def address=(value)
     if value.nil?
-      @aug.rm("#{resource[:hostname]}/address")
+      @aug.rm("#{@context}/#{resource[:hostname]}/address")
     else
-      @aug.set("#{resource[:hostname]}/address", value)
+      @aug.set("#{@context}/#{resource[:hostname]}/address", value)
     end
   end
 
   def meta_disk
-    @aug.get("#{resource[:hostname]}/meta-disk")
+    @aug.get("#{@context}/#{resource[:hostname]}/meta-disk")
   end
 
   def meta_disk=(value)
     if value.nil?
-      @aug.rm("#{resource[:hostname]}/meta-disk")
+      @aug.rm("#{@context}/#{resource[:hostname]}/meta-disk")
     else
-      @aug.set("#{resource[:hostname]}/meta-disk", value)
+      @aug.set("#{@context}/#{resource[:hostname]}/meta-disk", value)
     end
   end
 
   def flexible_meta_disk
-    @aug.get("#{resource[:hostname]}/flexible-meta-disk")
+    @aug.get("#{@context}/#{resource[:hostname]}/flexible-meta-disk")
   end
 
   def flexible_meta_disk=(value)
     if value.nil?
-      @aug.rm("#{resource[:hostname]}/flexible-meta-disk")
+      @aug.rm("#{@context}/#{resource[:hostname]}/flexible-meta-disk")
     else
-      @aug.set("#{resource[:hostname]}/flexible-meta-disk", value)
+      @aug.set("#{@context}/#{resource[:hostname]}/flexible-meta-disk", value)
     end
   end
 end
