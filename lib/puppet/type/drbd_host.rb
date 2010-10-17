@@ -10,6 +10,8 @@ Puppet::Type.newtype(:drbd_host) do
     newvalue(:absent) do
       provider.destroy
     end
+
+    defaultto :present
   end
 
   newparam(:name) do
