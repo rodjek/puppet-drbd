@@ -15,12 +15,18 @@ end
 Puppet::Type.type(:drbd_host).provide(:augeas) do
   desc "Augeas support"
 
-  confine :true, @aug.exists("/augeas/load/Drbd/lens")
+  confine :true => File.exists? "/usr/share/augeas/lenses/drbd.aug"
 
   def initialize(*args)
     super
-    @aug = Augeas.open("/")
+    @aug = Augeas.open("/", "/usr/share/augeas/lenses", Augeas::NO_MODL_AUTOLOAD)
+    @aug.transform(:lens => "Drbd.lns", :incl => "/etc/drbd.conf")
+    @aug.load
     @context = "/files/etc/drbd.conf/#{resource[:resource]}"
+  end
+
+  def flush
+    @aug.save
   end
 
   def create
