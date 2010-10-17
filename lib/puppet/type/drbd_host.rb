@@ -47,6 +47,10 @@ Puppet::Type.newtype(:drbd_host) do
          "roughly proportional to the size of the DRBD device (up to 128M)."
   end
 
+  autorequire(:drbd_resource) do
+    self[:resource]
+  end
+
   validate do
     unless @parameters.include?(:meta_disk) or @parameters.include?(:flexible_meta_disk)
       raise Puppet::Error, "You must specify either meta_disk or flexible_meta_disk"
