@@ -1,26 +1,20 @@
 require 'augeas' rescue nil
 
-class Augeas
-  unless Augeas.public_methods.include? "three_arg_open"
-    class << self
-      alias_method :three_arg_open, :open
-    end
-
-    def self.open(root, search_path="", flags=0)
-      three_arg_open(root, search_path, flags)
-    end
-  end
-end
-
 Puppet::Type.type(:drbd_resource).provide(:augeas) do
   desc "Augeas support"
 
-  confine :true, @aug.exists("/augeas/load/Drbd/lens")
+  confine :true => File.exists? "/usr/share/augeas/lenses/drbd.aug"
 
   def initialize(*args)
     super
-    @aug = Augeas.open("/")
+    @aug = Augeas::open("/", "/usr/share/augeas/lenses", Augeas::NO_MODL_AUTOLOAD)
+    @aug.transform(:lens => "Drbd.lns", :incl => "/etc/drbd.conf")
+    @aug.load
     @context = "/files/etc/drbd.conf"
+  end
+
+  def flush
+    @aug.save
   end
 
   def create
