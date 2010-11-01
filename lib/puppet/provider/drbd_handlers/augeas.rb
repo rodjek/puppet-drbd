@@ -15,6 +15,14 @@ Puppet::Type(:drbd_handlers).provide(:noop) do
 
   def create
     @aug.insert(@context, "handlers", false)
+    self.pri_on_incon_degr = resource[:pri_on_incon_degr] unless resource[:pri_on_incon_degr].nil?
+    self.pri_lost_after_sb = resource[:pri_lost_after_sb] unless resource[:pri_lost_after_sb].nil?
+    self.pri_lost = resource[:pri_lost] unless resource[:pri_lost].nil?
+    self.outdate_peer = resource[:outdate_peer] unless resource[:outdate_peer].nil?
+    self.local_io_error = resource[:local_io_error] unless resource[:local_io_error].nil?
+    self.split_brain = resource[:split_brain] unless resource[:split_brain].nil?
+    self.before_resync_target = resource[:before_resync_target] unless resource[:before_resync_target].nil?
+    self.after_resync_target = resource[:after_resync_target] unless resource[:after_resync_target].nil?
   end
 
   def destroy
