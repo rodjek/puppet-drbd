@@ -19,6 +19,15 @@ Puppet::Type.type(:drbd_disk).provide(:augeas) do
 
   def create
     @aug.insert(@context, "disk", false)
+    self.on_io_error = resource[:on_io_error] unless resource[:on_io_error].nil?
+    self.size = resource[:size] unless resource[:size].nil?
+    self.fencing = resource[:fencing] unless resource[:fencing].nil?
+    self.use_bmbv = resource[:use_bmbv] unless resource[:use_bmbv].nil?
+    self.no_disk_flushes = resource[:no_disk_flushes] unless resource[:no_disk_flushes].nil?
+    self.no_disk_barrier = resource[:no_disk_barrier] unless resource[:no_disk_barrier].nil?
+    self.no_disk_drain = resource[:no_disk_drain] unless resource[:no_disk_drain].nil?
+    self.no_md_flushes = resource[:no_md_flushes] unless resource[:no_md_flushes].nil?
+    self.max_bio_bvecs = resource[:max_bio_bvecs] unless resource[:max_bio_bvecs].nil?
   end
 
   def destroy
