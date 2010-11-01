@@ -38,23 +38,27 @@ Puppet::Type.type(:drbd_disk).provide(:augeas) do
     @aug.exists?("#{@context}/disk")
   end
 
+  def get_val(key)
+    @aug.get("#{@context}/disk/#{key}")
+  end
+
   def set_val(key, value)
     if value.nil?
-      @aug.rm("#{@context}/net/#{key}")
+      @aug.rm("#{@context}/disk/#{key}")
     else
-      @aug.set("#{@context}/net/#{key}", value.to_s)
+      @aug.set("#{@context}/disk/#{key}", value.to_s)
     end
   end
 
   def get_bool_val(key)
-    @aug.exists("#{@context}/net/#{key}") ? :true | :false
+    @aug.exists("#{@context}/disk/#{key}") ? :true | :false
   end
 
   def set_bool_val(key, value)
     if value == :true
-      @aug.insert("#{@context}/net", key, false)
+      @aug.insert("#{@context}/disk", key, false)
     else
-      @aug.rm("#{@context}/net/#{key}")
+      @aug.rm("#{@context}/disk/#{key}")
     end
   end
 
