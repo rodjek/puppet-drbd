@@ -38,111 +38,95 @@ Puppet::Type.type(:drbd_disk).provide(:augeas) do
     @aug.exists?("#{@context}/disk")
   end
 
+  def set_val(key, value)
+    if value.nil?
+      @aug.rm("#{@context}/net/#{key}")
+    else
+      @aug.set("#{@context}/net/#{key}", value.to_s)
+    end
+  end
+
+  def get_bool_val(key)
+    @aug.exists("#{@context}/net/#{key}") ? :true | :false
+  end
+
+  def set_bool_val(key, value)
+    if value == :true
+      @aug.insert("#{@context}/net", key, false)
+    else
+      @aug.rm("#{@context}/net/#{key}")
+    end
+  end
+
   def on_io_error
-    @aug.get("#{@context}/disk/on-io-error")
+    get_val('on-io-error')
   end
 
   def on_io_error=(value)
-    if value.nil?
-      @aug.rm("#{@context}/disk/on-io-error")
-    else
-      @aug.set("#{@context}/disk/on-io-error", value.to_s)
-    end
+    set_val('on-io-error', value)
   end
 
   def size
-    @aug.get("#{@context}/disk/size")
+    get_val('size')
   end
 
   def size=(value)
-    if value.nil?
-      @aug.rm("#{@context}/disk/size")
-    else
-      @aug.set("#{@context}/disk/size", value.to_s)
-    end
+    set_val('size', value)
   end
 
   def fencing
-    @aug.get("#{@context}/disk/fencing")
+    get_val('fencing')
   end
 
   def fencing=(value)
-    if value.nil?
-      @aug.rm("#{@context}/disk/fencing")
-    else
-      @aug.set("#{@context}/disk/fencing", value.to_s)
-    end
+    set_val('fencing', value)
   end
 
   def use_bmbv
-    @aug.exists("#{@context}/disk/use-bmbv") ? :true : :false
+    get_bool_val('use-bmbv')
   end
 
   def use_bmbv=(value)
-    if value == :true
-      @aug.insert("#{@context}/disk", "use-bmbv", false)
-    else
-      @aug.rm("#{@context}/disk/use-bmbv")
-    end
+    set_bool_val('use-bmbv', value)
   end
 
   def no_disk_flushes
-    @aug.exists("#{@context}/disk/no-disk-flushes") ? :true : :false
+    get_bool_val('no-disk-flushes')
   end
 
   def no_disk_flushes=(value)
-    if value == :true
-      @aug.insert("#{@context}/disk", "no-disk-flushes", false)
-    else
-      @aug.rm("#{@context}/disk/no-disk-flushes")
-    end
+    set_bool_val('no-disk-flushes', value)
   end
 
   def no_disk_barrier
-    @aug.exists("#{@context}/disk/no-disk-barrier") ? :true : :false
+    get_bool_val('no-disk-barrier')
   end
 
   def no_disk_barrier=(value)
-    if value == :true
-      @aug.insert("#{@context}/disk", "no-disk-barrier", false)
-    else
-      @aug.rm("#{@context}/disk/no-disk-barrier")
-    end
+    set_bool_val('no-disk-barrier', value)
   end
 
   def no_disk_drain
-    @aug.exists("#{@context}/disk/no-disk-drain") ? :true : :false
+    get_bool_val('no-disk-drain')
   end
 
   def no_disk_drain=(value)
-    if value == :true
-      @aug.insert("#{@context}/disk", "no-disk-drain", false)
-    else
-      @aug.rm("#{@context}/disk/no-disk-drain")
-    end
+    set_bool_val('no-disk-drain', value)
   end
 
   def no_md_flushes
-    @aug.exists("#{@context}/disk/no-md-flushes") ? :true : :false
+    get_bool_val('no-md-flushes')
   end
 
   def no_md_flushes=(value)
-    if value == :true
-      @aug.insert("#{@context}/disk", "no-md-flushes", false)
-    else
-      @aug.rm("#{@context}/disk/no-md-flushes")
-    end
+    set_bool_val('no-md-flushes', value)
   end
 
   def max_bio_bvecs
-    @aug.get("#{@context}/disk/max-bio-bvecs")
+    get_val('max-bio-bvecs')
   end
 
   def max_bio_bvecs=(value)
-    if value.nil?
-      @aug.rm("#{@context}/disk/max-bio-bvecs")
-    else
-      @aug.set("#{@context}/disk/max-bio-bvecs", value.to_s)
-    end
+    set_val('max-bio-bvecs', value)
   end
 end
